@@ -1274,3 +1274,41 @@ body.loaded .word-set {
         grid-template-columns: 1fr;
     }
 }
+/* Добавляем в конец файла styles.css */
+@media (max-width: 480px) {
+    .word-set-page {
+        padding: 1rem !important;
+    }
+    
+    .words-container {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    .word-card {
+        padding: 1rem !important;
+        margin: 0 !important;
+    }
+    
+    .word-english {
+        font-size: 1.2rem !important;
+    }
+    
+    .word-russian {
+        font-size: 1.1rem !important;
+    }
+    
+    .word-transcription {
+        font-size: 0.9rem !important;
+    }
+    
+    body {
+        padding: 5px !important;
+    }
+    
+    main {
+        width: 100% !important;
+        margin: 0.5rem auto !important;
+        padding: 0 !important;
+    }
+}
