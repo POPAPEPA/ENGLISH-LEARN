@@ -1,0 +1,116 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #3f37c9;
+  text-align: center;
+  padding: 30px;
+}
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+#letters button {
+  margin: 2px;
+  padding: 5px 10px;
+}
+.hidden {
+  display: none;
+}
+#wordDisplay {
+  font-size: 24px;
+  letter-spacing: 10px;
+  margin: 20px 0;
+}
+
+.hangman {
+  position: relative;
+  height: 250px;
+  margin-bottom: 20px;
+}
+
+.gallows {
+  position: absolute;
+  width: 100px;
+  height: 250px;
+  border-left: 5px solid #333;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.gallows::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5px;
+  width: 60px;
+  background: #333;
+}
+.gallows::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 60px;
+  width: 2px;
+  height: 40px;
+  background: #333;
+}
+
+.figure {
+  position: absolute;
+  left: calc(50% + 25px);
+  top: 30px;
+  transform: translateX(-50%);
+}
+
+.part {
+  display: none;
+  background: #000;
+  position: absolute;
+}
+
+.head {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 4px solid #000;
+  top: 0;
+  left: -15px;
+}
+
+.body {
+  width: 4px;
+  height: 50px;
+  top: 34px;
+  left: 0;
+}
+
+.left-arm {
+  width: 30px;
+  height: 4px;
+  top: 45px;
+  left: -30px;
+  transform: rotate(30deg);
+}
+
+.right-arm {
+  width: 30px;
+  height: 4px;
+  top: 45px;
+  left: 4px;
+  transform: rotate(-30deg);
+}
+
+.left-leg {
+  width: 4px;
+  height: 25px;
+  top: 84px;
+  left: -5px;
+  transform: rotate(0deg);
+}
+
+.right-leg {
+  width: 4px;
+  height: 25px;
+  top: 84px;
+  left: 5px;
+  transform: rotate(0deg);
+}

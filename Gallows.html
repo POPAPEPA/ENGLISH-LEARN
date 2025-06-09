@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learn English - Виселица</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="gallows.css">
+</head>
+<body>
+  <header>
+    <h1>Learn English</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="dictionary.html">Словарь</a></li>
+        <li><a href="games.html">Игры</a></li>
+        <li><a href="training.html">Тренировки</a></li>
+        <li><a href="#">Еще...</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="games-intro">
+      <h2>Виселица</h2>
+      <p>Угадайте слово по буквам до того, как будет нарисован человечек</p>
+    </section>
+
+    <div class="training-container">
+      <div class="container">
+        <div class="category-selector">
+          <label for="categorySelect">Выберите тему для игры:</label>
+          <select id="categorySelect">
+            <option value="">Выберите из списка</option>
+            <option value="фрукты">Фрукты</option>
+            <option value="животные">Животные</option>
+            <option value="профессии">Профессии</option>
+            <option value="цвета">Цвета</option>
+          </select>
+          <button class="play-button" onclick="startGame()">Начать игру</button>
+        </div>
+
+        <div id="gameArea" class="hidden">
+          <div class="hangman-container">
+            <div class="hangman">
+              <div class="gallows"></div>
+              <div class="figure">
+                <div class="head part"></div>
+                <div class="body part"></div>
+                <div class="left-arm part"></div>
+                <div class="right-arm part"></div>
+                <div class="left-leg part"></div>
+                <div class="right-leg part"></div>
+              </div>
+            </div>
+            <p id="wordDisplay"></p>
+            <div id="letters" class="letters-container"></div>
+            <p>Ошибки: <span id="mistakes">0</span> из 6</p>
+            <p id="resultMessage" class="result-message"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; Learn English</p>
+  </footer>
+
+  <script src="gallows.js"></script>
+</body>
+</html>

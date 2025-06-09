@@ -3,37 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn English - Главная</title>
+    <title>Native English - Главная</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Learn English</h1>
-        <nav>
-            <ul>
-                <li><a href="index1.html">Главная</a></li>
-                <li><a href="dictionary.html">Словарь</a></li>
-                <li><a href="games.html">Игры</a></li>
-                <li><a href="training.html">Тренировки</a></li>
-                <li><a href="#">Еще...</a></li>
-            </ul>
-        </nav>
+        <div class="header-container">
+            <h1>Native English</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Главная</a></li>
+                    <li><a href="dictionary.html">Словарь</a></li>
+                    <li><a href="games.html">Игры</a></li>
+                    <li><a href="training.html">Тренировки</a></li>
+                    <li><a href="#">Еще...</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <main>
-        <section class="highlight">
-            <h2>Это интересно</h2>
-            <div class="feature">
-                <div class="title">Аудиокниги на английском языке</div>
-                <div class="description">
-                    Слушайте аудиокниги на английском с параллельным переводом и просмотром значений к каждому слову.
+        <section class="dictionary-intro">
+            <h2>Добро пожаловать в Native English!</h2>
+            <p>Изучайте английский язык легко и эффективно с помощью интерактивных инструментов и игровых методик.</p>
+        </section>
+
+        <section class="word-sets">
+            <h3>Основные разделы</h3>
+            <div class="sets-container">
+                <div class="set-column">
+                    <a href="dictionary.html" class="word-set">
+                        <div class="set-name">Словарь</div>
+                        <div class="word-count">Тематические наборы слов</div>
+                    </a>
+                    <a href="training.html" class="word-set">
+                        <div class="set-name">Тренировки</div>
+                        <div class="word-count">Упражнения для закрепления</div>
+                    </a>
                 </div>
+                
+                <div class="set-column">
+                    <a href="games.html" class="word-set">
+                        <div class="set-name">Игры</div>
+                        <div class="word-count">Интерактивное изучение</div>
+                    </a>
+                    <a href="#" class="word-set">
+                        <div class="set-name">Статистика</div>
+                        <div class="word-count">Ваш прогресс</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="highlight">
+            <h2>Почему выбирают нас?</h2>
+            
+            <div class="feature">
+                <div class="title">Интерактивное обучение</div>
+                <div class="description">Используйте игровые методы для эффективного запоминания слов и правил английского языка.</div>
+            </div>
+            
+            <div class="feature">
+                <div class="title">Тематические наборы</div>
+                <div class="description">Изучайте слова в контексте конкретных тем и ситуаций для лучшего запоминания.</div>
+            </div>
+            
+            <div class="feature">
+                <div class="title">Персонализация</div>
+                <div class="description">Следите за своим прогрессом и получайте рекомендации по улучшению ваших навыков.</div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; Learn Eglish</p>
+        <p>&copy; 2023 Native English</p>
     </footer>
 
     <script src="script.js"></script>
