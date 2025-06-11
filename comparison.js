@@ -116,7 +116,7 @@ function checkAnswer(selected) {
     if (!gameActive) return;
     
     gameActive = false;
-    const options = document.querySelectorAll('.option');
+    const options = document.querySelectorAll('.option-btn');
     let correctOption = null;
     
     options.forEach(option => {
@@ -126,7 +126,7 @@ function checkAnswer(selected) {
         }
         
         if (option.textContent === selected && selected !== currentWord.russian) {
-            option.classList.add('incorrect');
+            option.classList.add('wrong'); // Изменено с 'incorrect' на 'wrong'
         }
         
         option.style.pointerEvents = 'none';
@@ -135,22 +135,16 @@ function checkAnswer(selected) {
     if (selected === currentWord.russian) {
         // Правильный ответ
         message.textContent = 'Правильно!';
+        message.classList.add('correct');
+        message.classList.remove('wrong');
         score += 10 + streak * 5;
         streak++;
         correctCount++;
-        
-        // Анимация для правильного ответа
-        correctOption.animate([
-            { transform: 'scale(1)' },
-            { transform: 'scale(1.1)' },
-            { transform: 'scale(1)' }
-        ], {
-            duration: 500,
-            iterations: 2
-        });
     } else {
         // Неправильный ответ
         message.textContent = `Неправильно! Правильный ответ: ${currentWord.russian}`;
+        message.classList.add('wrong');
+        message.classList.remove('correct');
         streak = 0;
     }
     
