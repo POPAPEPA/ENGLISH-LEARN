@@ -1,1048 +1,487 @@
-const exercises = {
-    // Легкий уровень
-    "present-simple": {
-        title: "Present Simple",
-        content: `
-            <p class="question">Заполните пропуски правильной формой глагола:</p>
-            <div class="word-blanks">
-                <div>She usually <span class="blank" data-answer="drinks">______</span> (drink) coffee in the morning.</div>
-                <div>They <span class="blank" data-answer="don't like">______</span> (not/like) spicy food.</div>
-                <div><span class="blank" data-answer="Does">______</span> he <span class="blank" data-answer="play">______</span> (play) tennis every weekend?</div>
-            </div>
-            
-            <div class="options">
-                <div class="option" draggable="true">drinks</div>
-                <div class="option" draggable="true">don't like</div>
-                <div class="option" draggable="true">Does</div>
-                <div class="option" draggable="true">play</div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-    "past-simple": {
-        title: "Past Simple",
-        content: `
-            <p class="question">Выберите правильную форму глагола:</p>
-            <div class="question">
-                1. Yesterday, I ______ to the cinema.
-                <div class="options">
-                    <div class="option" data-correct="true">went</div>
-                    <div class="option">go</div>
-                    <div class="option">goed</div>
-                </div>
-            </div>
-            <div class="question">
-                2. She ______ her homework last night.
-                <div class="options">
-                    <div class="option">do</div>
-                    <div class="option" data-correct="true">did</div>
-                    <div class="option">does</div>
-                </div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-    "future-simple": {
-        title: "Future Simple",
-        content: `
-            <p class="question">Составьте правильное предложение:</p>
-            <div class="word-order">
-                <div class="word-slot" data-word="I"></div>
-                <div class="word-slot" data-word="will"></div>
-                <div class="word-slot" data-word="call"></div>
-                <div class="word-slot" data-word="you"></div>
-                <div class="word-slot" data-word="tomorrow"></div>
-            </div>
-            
-            <div class="options">
-                <div class="option" draggable="true">I</div>
-                <div class="option" draggable="true">will</div>
-                <div class="option" draggable="true">call</div>
-                <div class="option" draggable="true">you</div>
-                <div class="option" draggable="true">tomorrow</div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-    "present-continuous": {
-        title: "Present Continuous",
-        content: `
-            <p class="question">Заполните пропуски:</p>
-            <div class="word-blanks">
-                <div>They <span class="blank" data-answer="are playing">______</span> (play) football now.</div>
-                <div>She <span class="blank" data-answer="is not studying">______</span> (not/study) at the moment.</div>
-                <div><span class="blank" data-answer="Is">______</span> it <span class="blank" data-answer="raining">______</span> (rain) outside?</div>
-            </div>
-            
-            <div class="options">
-                <div class="option" draggable="true">are playing</div>
-                <div class="option" draggable="true">is not studying</div>
-                <div class="option" draggable="true">Is</div>
-                <div class="option" draggable="true">raining</div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-
-"present-simple-passive": {
-title: "Present Simple Passive",
-content: `
-    <p class="question">Преобразуйте предложения в пассивный залог:</p>
-    <div class="word-blanks">
-        <div>They build houses. → Houses <span class="blank" data-answer="are built">______</span>.</div>
-        <div>She writes letters. → Letters <span class="blank" data-answer="are written">______</span>.</div>
-        <div>Do they speak English? → <span class="blank" data-answer="Is English spoken">______</span>?</div>
-    </div>
+document.addEventListener('DOMContentLoaded', function() {
+    // Элементы DOM
+    const tabButtons = document.querySelectorAll('.training-tab-btn');
+    const tabContents = document.querySelectorAll('.training-tab-content');
+    const topicItems = document.querySelectorAll('.training-topic-item');
+    const exercisesContainers = {
+        easy: document.getElementById('easy-exercises'),
+        medium: document.getElementById('medium-exercises'),
+        hard: document.getElementById('hard-exercises')
+    };
     
-    <div class="options">
-        <div class="option" draggable="true">are built</div>
-        <div class="option" draggable="true">are written</div>
-        <div class="option" draggable="true">Is English spoken</div>
-        <div class="option" draggable="true">built</div>
-    </div>
-    <button class="check-btn">Проверить</button>
-    <div class="result"></div>
-`
-},
-"future-simple-passive": {
-title: "Future Simple Passive",
-content: `
-    <p class="question">Заполните пропуски:</p>
-    <div class="word-blanks">
-        <div>The letter <span class="blank" data-answer="will be sent">______</span> (send) tomorrow.</div>
-        <div>The project <span class="blank" data-answer="will not be finished">______</span> (not/finish) next week.</div>
-        <div><span class="blank" data-answer="Will the meeting be held">______</span> (hold) on Friday?</div>
-    </div>
+    // Текущее состояние
+    let currentLevel = 'easy';
+    let currentTopic = null;
+    let currentExerciseIndex = 0;
     
-    <div class="options">
-        <div class="option" draggable="true">will be sent</div>
-        <div class="option" draggable="true">will not be finished</div>
-        <div class="option" draggable="true">Will the meeting be held</div>
-        <div class="option" draggable="true">will sent</div>
-    </div>
-    <button class="check-btn">Проверить</button>
-    <div class="result"></div>
-`
-},
-"ordinal-numerals": {
-title: "Ordinal Numerals",
-content: `
-    <p class="question">Выберите правильный порядковый номер:</p>
-    <div class="question">
-        1. 5th
-        <div class="options">
-            <div class="option" data-correct="true">fifth</div>
-            <div class="option">fiveth</div>
-            <div class="option">five</div>
-        </div>
-    </div>
-    <div class="question">
-        2. 12th
-        <div class="options">
-            <div class="option">twelveth</div>
-            <div class="option" data-correct="true">twelfth</div>
-            <div class="option">twelve</div>
-        </div>
-    </div>
-    <div class="question">
-        3. 3rd
-        <div class="options">
-            <div class="option">third</div>
-            <div class="option" data-correct="true">third</div>
-            <div class="option">three</div>
-        </div>
-    </div>
-    <button class="check-btn">Проверить</button>
-    <div class="result"></div>
-`
-},
-"degree-of-adjectives": {
-title: "Degree of Adjectives",
-content: `
-    <p class="question">Образуйте правильную степень сравнения:</p>
-    <div class="word-blanks">
-        <div>This is <span class="blank" data-answer="the tallest">______</span> (tall) building in the city.</div>
-        <div>My car is <span class="blank" data-answer="more expensive">______</span> (expensive) than yours.</div>
-        <div>This test is <span class="blank" data-answer="the most difficult">______</span> (difficult) of all.</div>
-    </div>
+    // Упражнения для каждой темы
+    const exercises = {
+        "present-simple": [
+            "She usually ______ (drink) coffee in the morning.",
+            "They ______ (not/like) spicy food.",
+            "______ he ______ (play) tennis every weekend?"
+        ],
+        "past-simple": [
+            "I ______ (go) to school yesterday.",
+            "She ______ (not/finish) her homework last night.",
+            "______ you ______ (see) that movie last week?"
+        ],
+        "future-simple": [
+            "We ______ (travel) to Spain next summer.",
+            "He ______ (not/attend) the meeting tomorrow.",
+            "______ she ______ (graduate) next year?"
+        ],
+        "present-continuous": [
+            "I ______ (read) a book right now.",
+            "They ______ (not/watch) TV at the moment.",
+            "______ she ______ (work) on her project now?"
+        ],
+        "present-simple-passive": [
+            "English ______ (speak) all over the world.",
+            "The car ______ (not/wash) every week.",
+            "______ the room ______ (clean) every day?"
+        ],
+        "future-simple-passive": [
+            "The project ______ (complete) by next month.",
+            "The package ______ (not/deliver) tomorrow.",
+            "______ the results ______ (announce) next week?"
+        ],
+        "ordinal-numerals": [
+            "This is my ______ (one) visit to London.",
+            "She finished in ______ (three) place.",
+            "December is the ______ (twelve) month."
+        ],
+        "degree-of-adjectives": [
+            "This book is ______ (interesting) than that one.",
+            "She is the ______ (tall) girl in our class.",
+            "This is ______ (good) solution of all."
+        ],
+        "general-questions": [
+            "______ you like coffee?",
+            "______ she speak French?",
+            "______ they live in London?"
+        ],
+        "there-is-are": [
+            "______ a cat on the roof.",
+            "______ many books on the shelf?",
+            "______ not enough time to finish."
+        ],
+        "used-to": [
+            "I ______ (play) tennis when I was younger.",
+            "She ______ (not/smoke) before she started working.",
+            "______ you ______ (live) in Moscow?"
+        ],
+        "going-to": [
+            "I ______ (study) medicine next year.",
+            "They ______ (not/travel) to Italy this summer.",
+            "______ she ______ (buy) a new car?"
+        ],
+        "past-continuous": [
+            "I ______ (read) when the phone rang.",
+            "They ______ (not/watch) TV at 8 PM yesterday.",
+            "______ you ______ (work) when I called?"
+        ],
+        "future-continuous": [
+            "This time tomorrow, I ______ (fly) to Paris.",
+            "She ______ (not/work) at this time tomorrow.",
+            "______ they ______ (wait) for us when we arrive?"
+        ],
+        "present-perfect": [
+            "I ______ (visit) London three times.",
+            "She ______ (not/finish) her homework yet.",
+            "______ you ever ______ (see) the Eiffel Tower?"
+        ],
+        "past-perfect": [
+            "By the time we arrived, the movie ______ (start).",
+            "She ______ (not/visit) that museum before yesterday.",
+            "______ he ______ (eat) when you called him?"
+        ],
+        "future-perfect": [
+            "By next year, I ______ (graduate) from university.",
+            "She ______ (not/complete) the project by Friday.",
+            "______ they ______ (move) to their new house by then?"
+        ],
+        "present-perfect-continuous": [
+            "I ______ (study) English for three years.",
+            "She ______ (not/work) here for long.",
+            "______ you ______ (wait) long?"
+        ],
+        "past-perfect-continuous": [
+            "I ______ (work) for hours when she arrived.",
+            "They ______ (not/live) there long when they moved.",
+            "______ he ______ (study) before the exam?"
+        ],
+        "future-in-past": [
+            "He said he ______ (come) to the party.",
+            "She told me she ______ (not/attend) the meeting.",
+            "______ they say they ______ (help) us?"
+        ],
+        "past-simple-passive": [
+            "The building ______ (build) in 1905.",
+            "The letter ______ (not/send) yesterday.",
+            "______ the cake ______ (make) by Mary?"
+        ],
+        "present-perfect-passive": [
+            "The work ______ (finish) already.",
+            "The documents ______ (not/sign) yet.",
+            "______ the invitations ______ (send) out?"
+        ],
+        "irregular-verbs": [
+            "I ______ (swim) in the lake yesterday.",
+            "She ______ (not/know) the answer to the question.",
+            "______ you ______ (take) the book yesterday?"
+        ],
+        "order-of-adjectives": [
+            "She has a ______ (red/large/beautiful) dress.",
+            "It was a ______ (metal/round/small) table.",
+            "They bought ______ (wooden/Italian/expensive) chairs."
+        ],
+        "wh-questions": [
+            "______ do you live?",
+            "______ time does the train leave?",
+            "______ book is this?"
+        ],
+        "modal-verbs": [
+            "You ______ (should/see) a doctor.",
+            "She ______ (can/speak) three languages.",
+            "______ I ______ (may/use) your phone?"
+        ],
+        "future-perfect-continuous": [
+            "By next month, I ______ (work) here for 5 years.",
+            "They ______ (not/live) in Paris for long when they move.",
+            "______ she ______ (study) long before the exam?"
+        ],
+        "present-continuous-passive": [
+            "The house ______ (paint) right now.",
+            "The documents ______ (not/prepare) at the moment.",
+            "______ the meal ______ (cook) now?"
+        ],
+        "past-continuous-passive": [
+            "The road ______ (repair) when we passed.",
+            "The song ______ (not/perform) when I arrived.",
+            "______ the letter ______ (write) yesterday at 5 PM?"
+        ],
+        "past-perfect-passive": [
+            "The car ______ (repair) before the accident.",
+            "The report ______ (not/complete) by the deadline.",
+            "______ the keys ______ (find) before you left?"
+        ],
+        "future-perfect-passive": [
+            "The project ______ (finish) by tomorrow.",
+            "The tickets ______ (not/book) by next week.",
+            "______ the building ______ (construct) by December?"
+        ],
+        "conditional-clauses": [
+            "If it rains, we ______ (stay) home.",
+            "If I ______ (know), I would have helped.",
+            "Unless she ______ (hurry), she'll miss the bus."
+        ],
+        "sequence-of-tenses": [
+            "He said he ______ (be) busy.",
+            "She told me she ______ (finish) her work.",
+            "They thought we ______ (leave) already."
+        ],
+        "indirect-speech": [
+            "She said, 'I am tired.' → She said that ______ .",
+            "He asked, 'Where do you live?' → He asked ______ .",
+            "They said, 'We will come.' → They said that ______ ."
+        ],
+        "phrasal-verbs": [
+            "Please ______ (turn off) the lights.",
+            "We need to ______ (put off) the meeting.",
+            "He ______ (look after) his little sister."
+        ],
+        "all-grammar": [
+            "She ______ (study) when I called yesterday.",
+            "By next year, they ______ (complete) the project.",
+            "If I ______ (have) time, I would help you."
+        ]
+    };
     
-    <div class="options">
-        <div class="option" draggable="true">the tallest</div>
-        <div class="option" draggable="true">more expensive</div>
-        <div class="option" draggable="true">the most difficult</div>
-        <div class="option" draggable="true">taller</div>
-    </div>
-    <button class="check-btn">Проверить</button>
-    <div class="result"></div>
-`
-},
-"general-questions": {
-title: "General Questions",
-content: `
-    <p class="question">Составьте общие вопросы:</p>
-    <div class="word-order">
-        <div class="word-slot" data-word="Do"></div>
-        <div class="word-slot" data-word="you"></div>
-        <div class="word-slot" data-word="like"></div>
-        <div class="word-slot" data-word="pizza"></div>
-        <div class="word-slot" data-word="?"></div>
-    </div>
-    <div class="word-order">
-        <div class="word-slot" data-word="Is"></div>
-        <div class="word-slot" data-word="she"></div>
-        <div class="word-slot" data-word="a"></div>
-        <div class="word-slot" data-word="doctor"></div>
-        <div class="word-slot" data-word="?"></div>
-    </div>
+    // Правильные ответы для упражнений
+    const correctAnswers = {
+        "present-simple": ["drinks", "don't like", "Does; play"],
+        "past-simple": ["went", "didn't finish", "Did; see"],
+        "future-simple": ["will travel", "won't attend", "Will; graduate"],
+        "present-continuous": ["am reading", "aren't watching", "Is; working"],
+        "present-simple-passive": ["is spoken", "isn't washed", "Is; cleaned"],
+        "future-simple-passive": ["will be completed", "won't be delivered", "Will; be announced"],
+        "ordinal-numerals": ["first", "third", "twelfth"],
+        "degree-of-adjectives": ["more interesting", "tallest", "the best"],
+        "general-questions": ["Do", "Does", "Do"],
+        "there-is-are": ["There is", "Are there", "There is"],
+        "used-to": ["used to play", "didn't use to smoke", "Did; use to live"],
+        "going-to": ["am going to study", "aren't going to travel", "Is; going to buy"],
+        "past-continuous": ["was reading", "weren't watching", "Were; working"],
+        "future-continuous": ["will be flying", "won't be working", "Will; be waiting"],
+        "present-perfect": ["have visited", "hasn't finished", "Have; seen"],
+        "past-perfect": ["had started", "hadn't visited", "Had; eaten"],
+        "future-perfect": ["will have graduated", "won't have completed", "Will; have moved"],
+        "present-perfect-continuous": ["have been studying", "hasn't been working", "Have; been waiting"],
+        "past-perfect-continuous": ["had been working", "hadn't been living", "Had; been studying"],
+        "future-in-past": ["would come", "wouldn't attend", "Would; help"],
+        "past-simple-passive": ["was built", "wasn't sent", "Was; made"],
+        "present-perfect-passive": ["has been finished", "haven't been signed", "Have; been sent"],
+        "irregular-verbs": ["swam", "didn't know", "Did; take"],
+        "order-of-adjectives": ["beautiful large red", "small round metal", "expensive Italian wooden"],
+        "wh-questions": ["Where", "What", "Whose"],
+        "modal-verbs": ["should see", "can speak", "May; use"],
+        "future-perfect-continuous": ["will have been working", "won't have been living", "Will; have been studying"],
+        "present-continuous-passive": ["is being painted", "aren't being prepared", "Is; being cooked"],
+        "past-continuous-passive": ["was being repaired", "wasn't being performed", "Was; being written"],
+        "past-perfect-passive": ["had been repaired", "hadn't been completed", "Had; been found"],
+        "future-perfect-passive": ["will have been finished", "won't have been booked", "Will; have been constructed"],
+        "conditional-clauses": ["will stay", "had known", "hurries"],
+        "sequence-of-tenses": ["was", "had finished", "had left"],
+        "indirect-speech": ["she was tired", "where I lived", "they would come"],
+        "phrasal-verbs": ["turn off", "put off", "looks after"],
+        "all-grammar": ["was studying", "will have completed", "had"]
+    };
     
-    <div class="options">
-        <div class="option" draggable="true">Do</div>
-        <div class="option" draggable="true">you</div>
-        <div class="option" draggable="true">like</div>
-        <div class="option" draggable="true">pizza</div>
-        <div class="option" draggable="true">?</div>
-        <div class="option" draggable="true">Is</div>
-        <div class="option" draggable="true">she</div>
-        <div class="option" draggable="true">a</div>
-        <div class="option" draggable="true">doctor</div>
-    </div>
-    <button class="check-btn">Проверить</button>
-    <div class="result"></div>
-`
-},
-"there-is-are": {
-title: "There is, There are",
-content: `
-    <p class="question">Выберите правильный вариант:</p>
-    <div class="question">
-        1. ______ a book on the table.
-        <div class="options">
-            <div class="option" data-correct="true">There is</div>
-            <div class="option">There are</div>
-            <div class="option">It is</div>
-        </div>
-    </div>
-    <div class="question">
-        2. ______ many students in the class.
-        <div class="options">
-            <div class="option">There is</div>
-            <div class="option" data-correct="true">There are</div>
-            <div class="option">They are</div>
-        </div>
-    </div>
-    <div class="question">
-        3. ______ any milk in the fridge?
-        <div class="options">
-            <div class="option" data-correct="true">Is there</div>
-            <div class="option">Are there</div>
-            <div class="option">There is</div>
-        </div>
-    </div>
-    <button class="check-btn">Проверить</button>
-    <div class="result"></div>
-`
-},
-"used-to": {
-title: "Used to",
-content: `
-    <p class="question">Заполните пропуски:</p>
-    <div class="word-blanks">
-        <div>I <span class="blank" data-answer="used to play">______</span> (play) tennis when I was young.</div>
-        <div>She <span class="blank" data-answer="did not use to like">______</span> (not/like) coffee.</div>
-        <div><span class="blank" data-answer="Did you use to live">______</span> (live) in London?</div>
-    </div>
+    // Подсказки для каждой темы
+    const hints = {
+        "present-simple": "Используйте форму глагола без 'to'. Для he/she/it добавляйте окончание -s/-es.",
+        "past-simple": "Для правильных глаголов используйте окончание -ed. Неправильные глаголы имеют особые формы.",
+        "future-simple": "Используйте 'will' + глагол без 'to'.",
+        "present-continuous": "Используйте am/is/are + глагол с окончанием -ing.",
+        "present-simple-passive": "Формула: am/is/are + past participle (3 форма глагола).",
+        "future-simple-passive": "Формула: will be + past participle.",
+        "ordinal-numerals": "Добавляйте -th к числительным (first, second, third - исключения).",
+        "degree-of-adjectives": "Сравнительная степень: прилагательное + -er. Превосходная: the + прилагательное + -est.",
+        "general-questions": "Начинайте вопрос с do/does. Для he/she/it используйте does.",
+        "there-is-are": "Используйте 'there is' для единственного числа, 'there are' для множественного.",
+        "used-to": "Используется для описания прошлых привычек. Форма: used to + глагол.",
+        "going-to": "Используется для планов и намерений. Форма: am/is/are going to + глагол.",
+        "past-continuous": "Формула: was/were + глагол с -ing. Используется для действий в процессе в прошлом.",
+        "future-continuous": "Формула: will be + глагол с -ing. Описывает действия в процессе в будущем.",
+        "present-perfect": "Формула: have/has + past participle. Связывает прошлое с настоящим.",
+        "past-perfect": "Формула: had + past participle. Описывает действие, произошедшее до другого действия в прошлом.",
+        "future-perfect": "Формула: will have + past participle. Описывает завершенные действия к определенному моменту в будущем.",
+        "present-perfect-continuous": "Формула: have/has been + глагол с -ing. Подчеркивает длительность действия.",
+        "past-perfect-continuous": "Формула: had been + глагол с -ing. Длительное действие перед другим действием в прошлом.",
+        "future-in-past": "Используйте 'would' для описания будущего с точки зрения прошлого.",
+        "past-simple-passive": "Формула: was/were + past participle.",
+        "present-perfect-passive": "Формула: have/has been + past participle.",
+        "irregular-verbs": "Неправильные глаголы имеют особые формы прошедшего времени и причастия.",
+        "order-of-adjectives": "Порядок прилагательных: мнение, размер, возраст, форма, цвет, происхождение, материал, назначение.",
+        "wh-questions": "Вопросы начинаются с вопросительных слов: what, where, when, why, how, who, whom, whose, which.",
+        "modal-verbs": "Модальные глаголы: can, could, may, might, must, shall, should, will, would.",
+        "future-perfect-continuous": "Формула: will have been + глагол с -ing. Длительное действие, завершенное к моменту в будущем.",
+        "present-continuous-passive": "Формула: am/is/are being + past participle.",
+        "past-continuous-passive": "Формула: was/were being + past participle.",
+        "past-perfect-passive": "Формула: had been + past participle.",
+        "future-perfect-passive": "Формула: will have been + past participle.",
+        "conditional-clauses": "Условные предложения: нулевой тип (if + present, present), первый (if + present, future), второй (if + past, would + verb), третий (if + past perfect, would have + participle).",
+        "sequence-of-tenses": "При согласовании времен: present становится past, future становится future-in-the-past (would).",
+        "indirect-speech": "Изменяйте время глагола, местоимения и обстоятельства места/времени.",
+        "phrasal-verbs": "Фразовые глаголы состоят из глагола + частица (предлог/наречие), значение часто отличается от компонентов.",
+        "all-grammar": "Комбинируйте различные грамматические конструкции в зависимости от контекста."
+    };
     
-    <div class="options">
-        <div class="option" draggable="true">used to play</div>
-        <div class="option" draggable="true">did not use to like</div>
-        <div class="option" draggable="true">Did you use to live</div>
-        <div class="option" draggable="true">use to play</div>
-    </div>
-    <button class="check-btn">Проверить</button>
-    <div class="result"></div>
-`
-},
-"going-to": {
-title: "To be going to",
-content: `
-    <p class="question">Составьте предложения:</p>
-    <div class="word-order">
-        <div class="word-slot" data-word="I"></div>
-        <div class="word-slot" data-word="am"></div>
-        <div class="word-slot" data-word="going"></div>
-        <div class="word-slot" data-word="to"></div>
-        <div class="word-slot" data-word="visit"></div>
-        <div class="word-slot" data-word="my"></div>
-        <div class="word-slot" data-word="grandparents"></div>
-        <div class="word-slot" data-word="tomorrow"></div>
-        <div class="word-slot" data-word="."></div>
-    </div>
-    
-    <div class="options">
-        <div class="option" draggable="true">I</div>
-        <div class="option" draggable="true">am</div>
-        <div class="option" draggable="true">going</div>
-        <div class="option" draggable="true">to</div>
-        <div class="option" draggable="true">visit</div>
-        <div class="option" draggable="true">my</div>
-        <div class="option" draggable="true">grandparents</div>
-        <div class="option" draggable="true">tomorrow</div>
-        <div class="option" draggable="true">.</div>
-    </div>
-    <button class="check-btn">Проверить</button>
-    <div class="result"></div>
-`
-},
-
-    
-    // Средний уровень
-    "present-perfect": {
-        title: "Present Perfect",
-        content: `
-            <p class="question">Выберите правильный вариант:</p>
-            <div class="question">
-                1. She ______ to Paris three times.
-                <div class="options">
-                    <div class="option" data-correct="true">has been</div>
-                    <div class="option">was</div>
-                    <div class="option">have been</div>
-                </div>
-            </div>
-            <div class="question">
-                2. How long ______ you ______ your friend?
-                <div class="options">
-                    <div class="option" data-correct="true">have / known</div>
-                    <div class="option">did / know</div>
-                    <div class="option">do / know</div>
-                </div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-    "irregular-verbs": {
-        title: "Irregular Verbs",
-        content: `
-            <p class="question">Выберите правильные формы неправильных глаголов:</p>
-            <div class="question">
-                1. Past simple of "see"
-                <div class="options">
-                    <div class="option">seed</div>
-                    <div class="option" data-correct="true">saw</div>
-                    <div class="option">seen</div>
-                </div>
-            </div>
-            <div class="question">
-                2. Past participle of "go"
-                <div class="options">
-                    <div class="option">goed</div>
-                    <div class="option">went</div>
-                    <div class="option" data-correct="true">gone</div>
-                </div>
-            </div>
-            <div class="question">
-                3. Past simple of "write"
-                <div class="options">
-                    <div class="option" data-correct="true">wrote</div>
-                    <div class="option">writed</div>
-                    <div class="option">written</div>
-                </div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-    "modal-verbs": {
-        title: "Modal Verbs",
-        content: `
-            <p class="question">Заполните пропуски модальными глаголами:</p>
-            <div class="word-blanks">
-                <div>You <span class="blank" data-answer="must">______</span> stop at the red light.</div>
-                <div>She <span class="blank" data-answer="can">______</span> speak three languages.</div>
-                <div>They <span class="blank" data-answer="should">______</span> see a doctor.</div>
-            </div>
-            
-            <div class="options">
-                <div class="option" draggable="true">must</div>
-                <div class="option" draggable="true">can</div>
-                <div class="option" draggable="true">should</div>
-                <div class="option" draggable="true">might</div>
-                <div class="option" draggable="true">could</div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-
-"past-continuous": {
-title: "Past Continuous",
-content: `
-<p class="question">Выберите правильный вариант:</p>
-<div class="question">
-    1. I ______ TV when she called.
-    <div class="options">
-        <div class="option" data-correct="true">was watching</div>
-        <div class="option">watched</div>
-        <div class="option">am watching</div>
-    </div>
-</div>
-<div class="question">
-    2. They ______ football at 5 PM yesterday.
-    <div class="options">
-        <div class="option">play</div>
-        <div class="option" data-correct="true">were playing</div>
-        <div class="option">played</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"future-continuous": {
-title: "Future Continuous",
-content: `
-<p class="question">Заполните пропуски:</p>
-<div class="word-blanks">
-    <div>This time tomorrow, I <span class="blank" data-answer="will be flying">______</span> to London.</div>
-    <div>At 8 PM tonight, she <span class="blank" data-answer="will be studying">______</span> for the exam.</div>
-</div>
-<div class="options">
-    <div class="option" draggable="true">will be flying</div>
-    <div class="option" draggable="true">will be studying</div>
-    <div class="option" draggable="true">will fly</div>
-    <div class="option" draggable="true">will study</div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"past-perfect": {
-title: "Past Perfect",
-content: `
-<p class="question">Выберите правильный вариант:</p>
-<div class="question">
-    1. She ______ the movie before we arrived.
-    <div class="options">
-        <div class="option">saw</div>
-        <div class="option" data-correct="true">had seen</div>
-        <div class="option">has seen</div>
-    </div>
-</div>
-<div class="question">
-    2. They left after they ______ dinner.
-    <div class="options">
-        <div class="option" data-correct="true">had finished</div>
-        <div class="option">finished</div>
-        <div class="option">have finished</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"future-perfect": {
-title: "Future Perfect",
-content: `
-<p class="question">Заполните пропуски:</p>
-<div class="word-blanks">
-    <div>By next year, I <span class="blank" data-answer="will have graduated">______</span> from university.</div>
-    <div>They ______ the project by Friday.
-        <div class="options">
-            <div class="option" data-correct="true">will have completed</div>
-            <div class="option">will complete</div>
-            <div class="option">completed</div>
-        </div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"present-perfect-continuous": {
-title: "Present Perfect Continuous",
-content: `
-<p class="question">Выберите правильный вариант:</p>
-<div class="question">
-    1. He ______ for two hours.
-    <div class="options">
-        <div class="option">has waited</div>
-        <div class="option" data-correct="true">has been waiting</div>
-        <div class="option">is waiting</div>
-    </div>
-</div>
-<div class="question">
-    2. How long ______ you ______ English?
-    <div class="options">
-        <div class="option" data-correct="true">have / been learning</div>
-        <div class="option">are / learning</div>
-        <div class="option">do / learn</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"past-perfect-continuous": {
-title: "Past Perfect Continuous",
-content: `
-<p class="question">Заполните пропуски:</p>
-<div class="word-blanks">
-    <div>She was tired because she <span class="blank" data-answer="had been working">______</span> all day.</div>
-    <div>They ______ for hours before the concert started.
-        <div class="options">
-            <div class="option" data-correct="true">had been waiting</div>
-            <div class="option">were waiting</div>
-            <div class="option">waited</div>
-        </div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"future-in-the-past": {
-title: "Future in the Past",
-content: `
-<p class="question">Выберите правильный вариант:</p>
-<div class="question">
-    1. She said she ______ later.
-    <div class="options">
-        <div class="option">will come</div>
-        <div class="option" data-correct="true">would come</div>
-        <div class="option">comes</div>
-    </div>
-</div>
-<div class="question">
-    2. We knew they ______ us.
-    <div class="options">
-        <div class="option" data-correct="true">would help</div>
-        <div class="option">will help</div>
-        <div class="option">helped</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"past-simple-passive": {
-title: "Past Simple Passive",
-content: `
-<p class="question">Перестройте предложения в пассивный залог:</p>
-<div class="word-blanks">
-    <div>They built this house in 1990 → This house <span class="blank" data-answer="was built">______</span> in 1990.</div>
-    <div>Shakespeare wrote Hamlet → Hamlet <span class="blank" data-answer="was written">______</span> by Shakespeare.</div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"present-perfect-passive": {
-title: "Present Perfect Passive",
-content: `
-<p class="question">Выберите правильный вариант:</p>
-<div class="question">
-    1. The documents ______.
-    <div class="options">
-        <div class="option">have signed</div>
-        <div class="option" data-correct="true">have been signed</div>
-        <div class="option">has been signed</div>
-    </div>
-</div>
-<div class="question">
-    2. The rooms ______ yet.
-    <div class="options">
-        <div class="option">haven't cleaned</div>
-        <div class="option" data-correct="true">haven't been cleaned</div>
-        <div class="option">hasn't been cleaned</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"order-of-adjectives": {
-title: "Order of Adjectives",
-content: `
-<p class="question">Расставьте прилагательные в правильном порядке:</p>
-<div class="word-blanks">
-    <div>a (wooden / round / beautiful) table → 
-        <span class="blank" data-answer="beautiful round wooden">______</span> table</div>
-    <div>an (German / old / luxury) car → 
-        <span class="blank" data-answer="old luxury German">______</span> car</div>
-</div>
-<div class="options">
-    <div class="option" draggable="true">beautiful round wooden</div>
-    <div class="option" draggable="true">round beautiful wooden</div>
-    <div class="option" draggable="true">old luxury German</div>
-    <div class="option" draggable="true">luxury old German</div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"wh-questions": {
-title: "Wh-questions",
-content: `
-<p class="question">Составьте правильные вопросы:</p>
-<div class="word-blanks">
-    <div>______ did you go? → I went to Paris. 
-        <div class="options">
-            <div class="option" data-correct="true">Where</div>
-            <div class="option">When</div>
-            <div class="option">Why</div>
-        </div>
-    </div>
-    <div>______ are you crying? → Because I'm sad.
-        <div class="options">
-            <div class="option">How</div>
-            <div class="option" data-correct="true">Why</div>
-            <div class="option">Who</div>
-        </div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-    
-    // Сложный уровень
-    "conditional-clauses": {
-        title: "Conditional Clauses",
-        content: `
-            <p class="question">Составьте правильное предложение:</p>
-            <div class="word-order">
-                <div class="word-slot" data-word="If"></div>
-                <div class="word-slot" data-word="he"></div>
-                <div class="word-slot" data-word="had"></div>
-                <div class="word-slot" data-word="studied"></div>
-                <div class="word-slot" data-word="harder"></div>
-                <div class="word-slot" data-word="he"></div>
-                <div class="word-slot" data-word="would"></div>
-                <div class="word-slot" data-word="have"></div>
-                <div class="word-slot" data-word="passed"></div>
-                <div class="word-slot" data-word="the"></div>
-                <div class="word-slot" data-word="exam"></div>
-            </div>
-            
-            <div class="options">
-                <div class="option" draggable="true">If</div>
-                <div class="option" draggable="true">he</div>
-                <div class="option" draggable="true">had</div>
-                <div class="option" draggable="true">studied</div>
-                <div class="option" draggable="true">harder</div>
-                <div class="option" draggable="true">he</div>
-                <div class="option" draggable="true">would</div>
-                <div class="option" draggable="true">have</div>
-                <div class="option" draggable="true">passed</div>
-                <div class="option" draggable="true">the</div>
-                <div class="option" draggable="true">exam</div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-    "phrasal-verbs": {
-        title: "Phrasal Verbs",
-        content: `
-            <p class="question">Выберите правильный фразовый глагол:</p>
-            <div class="question">
-                1. Please ______ the light when you leave.
-                <div class="options">
-                    <div class="option">turn up</div>
-                    <div class="option" data-correct="true">turn off</div>
-                    <div class="option">turn down</div>
-                </div>
-            </div>
-            <div class="question">
-                2. We need to ______ the meeting until next week.
-                <div class="options">
-                    <div class="option">put down</div>
-                    <div class="option" data-correct="true">put off</div>
-                    <div class="option">put on</div>
-                </div>
-            </div>
-            <div class="question">
-                3. Can you ______ the radio? I can't hear it.
-                <div class="options">
-                    <div class="option" data-correct="true">turn up</div>
-                    <div class="option">turn out</div>
-                    <div class="option">turn over</div>
-                </div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-    "indirect-speech": {
-        title: "Indirect Speech",
-        content: `
-            <p class="question">Преобразуйте прямую речь в косвенную:</p>
-            <div class="word-blanks">
-                <div>She said, "I am reading a book." → She said that <span class="blank" data-answer="she was reading a book">______</span>.</div>
-                <div>He asked, "Where do you live?" → He asked <span class="blank" data-answer="where I lived">______</span>.</div>
-                <div>They said, "We will come tomorrow." → They said that <span class="blank" data-answer="they would come the next day">______</span>.</div>
-            </div>
-            
-            <div class="options">
-                <div class="option" draggable="true">she was reading a book</div>
-                <div class="option" draggable="true">where I lived</div>
-                <div class="option" draggable="true">they would come the next day</div>
-                <div class="option" draggable="true">she is reading a book</div>
-                <div class="option" draggable="true">where I live</div>
-            </div>
-            <button class="check-btn">Проверить</button>
-            <div class="result"></div>
-        `
-    },
-    // Дополненные упражнения для сложного уровня
-"future-perfect-continuous": {
-title: "Future Perfect Continuous",
-content: `
-<p class="question">Выберите правильный вариант:</p>
-<div class="question">
-    1. By 2025, they ______ for 10 years.
-    <div class="options">
-        <div class="option">will work</div>
-        <div class="option" data-correct="true">will have been working</div>
-        <div class="option">have been working</div>
-    </div>
-</div>
-<div class="question">
-    2. She ______ her thesis for six months by June.
-    <div class="options">
-        <div class="option" data-correct="true">will have been writing</div>
-        <div class="option">will write</div>
-        <div class="option">has been writing</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"present-continuous-passive": {
-title: "Present Continuous Passive",
-content: `
-<p class="question">Перестройте предложения в пассивный залог:</p>
-<div class="word-blanks">
-    <div>They are building a new bridge → A new bridge <span class="blank" data-answer="is being built">______</span>.</div>
-    <div>He is interviewing candidates → Candidates <span class="blank" data-answer="are being interviewed">______</span>.</div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"past-continuous-passive": {
-title: "Past Continuous Passive",
-content: `
-<p class="question">Выберите правильный вариант:</p>
-<div class="question">
-    1. The car ______ when the accident happened.
-    <div class="options">
-        <div class="option">was repaired</div>
-        <div class="option" data-correct="true">was being repaired</div>
-        <div class="option">were repairing</div>
-    </div>
-</div>
-<div class="question">
-    2. The documents ______ during the meeting.
-    <div class="options">
-        <div class="option" data-correct="true">were being discussed</div>
-        <div class="option">was discussed</div>
-        <div class="option">discussed</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"past-perfect-passive": {
-title: "Past Perfect Passive",
-content: `
-<p class="question">Перестройте предложения в пассивный залог:</p>
-<div class="word-blanks">
-    <div>They had completed the project → The project <span class="blank" data-answer="had been completed">______</span>.</div>
-    <div>Someone had stolen the painting → The painting <span class="blank" data-answer="had been stolen">______</span>.</div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"future-perfect-passive": {
-title: "Future Perfect Passive",
-content: `
-<p class="question">Заполните пропуски:</p>
-<div class="word-blanks">
-    <div>By tomorrow, the report ______.
-        <div class="options">
-            <div class="option">will be finished</div>
-            <div class="option" data-correct="true">will have been finished</div>
-            <div class="option">has been finished</div>
-        </div>
-    </div>
-    <div>All preparations ______ by 6 PM.
-        <div class="options">
-            <div class="option" data-correct="true">will have been completed</div>
-            <div class="option">will complete</div>
-            <div class="option">are completed</div>
-        </div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"sequence-of-tenses": {
-title: "Sequence of Tenses",
-content: `
-<p class="question">Выберите правильный вариант согласования времен:</p>
-<div class="question">
-    1. She said she ______ to Paris the previous year.
-    <div class="options">
-        <div class="option" data-correct="true">had gone</div>
-        <div class="option">went</div>
-        <div class="option">has gone</div>
-    </div>
-</div>
-<div class="question">
-    2. He knows that they ______ here tomorrow.
-    <div class="options">
-        <div class="option">will be</div>
-        <div class="option" data-correct="true">would be</div>
-        <div class="option">are</div>
-    </div>
-</div>
-<div class="question">
-    3. I thought you ______ the rules.
-    <div class="options">
-        <div class="option" data-correct="true">knew</div>
-        <div class="option">know</div>
-        <div class="option">had known</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-"all-grammar-review": {
-title: "All Grammar Review",
-content: `
-<p class="question">Выберите правильный вариант:</p>
-<div class="question">
-    1. If I ______ you, I would reconsider.
-    <div class="options">
-        <div class="option">am</div>
-        <div class="option" data-correct="true">were</div>
-        <div class="option">would be</div>
-    </div>
-</div>
-<div class="question">
-    2. The package ______ by the time we arrived.
-    <div class="options">
-        <div class="option">was delivered</div>
-        <div class="option" data-correct="true">had been delivered</div>
-        <div class="option">delivered</div>
-    </div>
-</div>
-<div class="question">
-    3. She ______ for three hours when I called.
-    <div class="options">
-        <div class="option">studied</div>
-        <div class="option" data-correct="true">had been studying</div>
-        <div class="option">was studied</div>
-    </div>
-</div>
-<div class="question">
-    4. By next month, I ______ here for five years.
-    <div class="options">
-        <div class="option">work</div>
-        <div class="option">will work</div>
-        <div class="option" data-correct="true">will have been working</div>
-    </div>
-</div>
-<button class="check-btn">Проверить</button>
-<div class="result"></div>
-`
-},
-};
-
-document.querySelectorAll('.tab-btn').forEach(button => {
-    button.addEventListener('click', () => {
+    // Функция переключения вкладок
+    function switchTab(level) {
+        currentLevel = level;
+        currentTopic = null;
+        currentExerciseIndex = 0;
         
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        tabButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === level);
+        });
         
-       
-        button.classList.add('active');
-        const tabId = button.getAttribute('data-tab');
-        document.getElementById(`${tabId}-tab`).classList.add('active');
-    });
-});
-
-document.querySelectorAll('.topic-item').forEach(item => {
-    item.addEventListener('click', () => {
-        const topicId = item.getAttribute('data-topic');
-        const level = item.classList.contains('easy') ? 'easy' : 
-                     item.classList.contains('medium') ? 'medium' : 'hard';
+        tabContents.forEach(content => {
+            content.classList.toggle('active', content.id === `${level}-tab`);
+        });
         
-        const exercisesContainer = document.getElementById(`${level}-exercises`);
-        exercisesContainer.classList.add('active');
+        Object.values(exercisesContainers).forEach(container => {
+            container.style.display = 'none';
+        });
         
-        exercisesContainer.innerHTML = '';
+        document.querySelectorAll('.training-topic-item.active').forEach(item => {
+            item.classList.remove('active');
+        });
+    }
+    
+    // Функция отображения упражнений
+    function showExercises(topic, level) {
+        currentExerciseIndex = 0;
         
-        const exercise = exercises[topicId];
-        if (exercise) {
-            const exerciseElement = document.createElement('div');
-            exerciseElement.className = 'exercise';
+        // Прокрутка к упражнениям
+        exercisesContainers[level].scrollIntoView({ behavior: 'smooth' });
+        
+        Object.values(exercisesContainers).forEach(container => {
+            container.style.display = 'none';
+        });
+        
+        const activeContainer = exercisesContainers[level];
+        if (activeContainer) {
+            activeContainer.style.display = 'block';
+            activeContainer.innerHTML = '';
             
-            let levelClass = 'level-easy';
-            let levelText = 'Легко';
-            if (level === 'medium') {
-                levelClass = 'level-medium';
-                levelText = 'Средне';
-            } else if (level === 'hard') {
-                levelClass = 'level-hard';
-                levelText = 'Сложно';
+            if (!exercises[topic] || exercises[topic].length === 0) {
+                activeContainer.innerHTML = `
+                    <div class="no-exercises">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Упражнения для этой темы пока недоступны</p>
+                    </div>
+                `;
+                return;
             }
             
-            exerciseElement.innerHTML = `
-                <span class="level-indicator ${levelClass}">${levelText}</span>
-                <h3>${exercise.title}</h3>
-                <div class="exercise-content">
-                    ${exercise.content}
-                </div>
-                <div class="controls">
-                    <button class="secondary" id="prevTopic">Предыдущая тема</button>
-                    <button id="nextTopic">Следующая тема</button>
-                </div>
-            `;
-            
-            exercisesContainer.appendChild(exerciseElement);
-            
-            initExercise(exerciseElement);
-            
-            exerciseElement.scrollIntoView({ behavior: 'smooth' });
+            // Отображаем только текущее упражнение
+            renderExercise(topic, level, currentExerciseIndex);
         }
-    });
-});
-
-function initExercise(exerciseElement) {
-    const options = exerciseElement.querySelectorAll('.option');
-    const slots = exerciseElement.querySelectorAll('.word-slot');
-    const blanks = exerciseElement.querySelectorAll('.blank');
-    let draggedItem = null;
+    }
     
-    options.forEach(option => {
-        option.addEventListener('dragstart', function(e) {
-            draggedItem = this;
-            this.style.opacity = '0.4';
-            e.dataTransfer.setData('text/plain', this.textContent);
+    // Функция отображения одного упражнения
+    function renderExercise(topic, level, index) {
+        const activeContainer = exercisesContainers[level];
+        activeContainer.innerHTML = '';
+        
+        const totalExercises = exercises[topic].length;
+        const exercise = exercises[topic][index];
+        
+        // Заголовок темы
+        const topicHeader = document.createElement('h4');
+        topicHeader.className = 'exercise-topic-header';
+        topicHeader.textContent = document.querySelector(`[data-topic="${topic}"] .topic-name`).textContent;
+        activeContainer.appendChild(topicHeader);
+        
+        // Прогресс
+        const progress = document.createElement('div');
+        progress.className = 'exercise-progress';
+        progress.textContent = `Упражнение ${index + 1} из ${totalExercises}`;
+        activeContainer.appendChild(progress);
+        
+        // Упражнение
+        const exerciseElement = document.createElement('div');
+        exerciseElement.className = 'exercise';
+        exerciseElement.innerHTML = `
+            <div class="exercise-header">
+                <div class="exercise-number">${index + 1}.</div>
+                <button class="hint-btn">
+                    <i class="fas fa-lightbulb"></i> Подсказка
+                </button>
+            </div>
+            <div class="exercise-text">${exercise}</div>
+            <div class="exercise-input">
+                <input type="text" placeholder="Введите ответ..." id="exercise-input-field">
+                <button class="check-btn">
+                    <i class="fas fa-check"></i> Проверить
+                </button>
+            </div>
+            <div class="exercise-feedback"></div>
+            <div class="exercise-navigation" style="display: none;">
+                <button class="next-btn">Следующее упражнение <i class="fas fa-arrow-right"></i></button>
+            </div>
+        `;
+        activeContainer.appendChild(exerciseElement);
+        
+        // Элементы управления
+        const checkBtn = exerciseElement.querySelector('.check-btn');
+        const hintBtn = exerciseElement.querySelector('.hint-btn');
+        const inputField = exerciseElement.querySelector('input');
+        const feedbackEl = exerciseElement.querySelector('.exercise-feedback');
+        const navigationEl = exerciseElement.querySelector('.exercise-navigation');
+        const nextBtn = exerciseElement.querySelector('.next-btn');
+        
+        // Обработчики
+        hintBtn.addEventListener('click', () => {
+            feedbackEl.textContent = hints[topic] || 'Подсказка недоступна';
+            feedbackEl.className = 'exercise-feedback hint';
         });
         
-        option.addEventListener('dragend', function() {
-            this.style.opacity = '1';
-        });
-    });
-    
-    const dropElements = [...slots, ...blanks];
-    dropElements.forEach(element => {
-        element.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            this.style.backgroundColor = '#e9ecef';
-        });
-        
-        element.addEventListener('dragenter', function(e) {
-            e.preventDefault();
-        });
-        
-        element.addEventListener('dragleave', function() {
-            this.style.backgroundColor = '';
-        });
-        
-        element.addEventListener('drop', function(e) {
-            e.preventDefault();
-            this.style.backgroundColor = '';
+        checkBtn.addEventListener('click', () => {
+            const userAnswer = inputField.value.trim();
+            if (!userAnswer) {
+                feedbackEl.textContent = 'Пожалуйста, введите ответ';
+                feedbackEl.className = 'exercise-feedback error';
+                return;
+            }
             
-            if (draggedItem) {
-                if (this.classList.contains('blank')) {
-                    this.textContent = draggedItem.textContent;
-                    this.setAttribute('data-filled', 'true');
-                } 
-                else if (this.classList.contains('word-slot')) {
-                    this.textContent = draggedItem.textContent;
-                    this.setAttribute('data-filled', 'true');
-                    this.style.borderStyle = 'solid';
-                }
+            // Проверка ответа
+            const correctAnswer = correctAnswers[topic][index];
+            const normalizedUserAnswer = userAnswer.toLowerCase().replace(/\s+/g, ' ');
+            const normalizedCorrectAnswer = correctAnswer.toLowerCase().replace(/\s+/g, ' ');
+            
+            if (normalizedUserAnswer === normalizedCorrectAnswer) {
+                feedbackEl.innerHTML = `
+                    <i class="fas fa-check-circle"></i> Правильно! 
+                    <span class="correct-answer">${correctAnswer}</span>
+                `;
+                feedbackEl.className = 'exercise-feedback success';
+                
+                // Показываем кнопку "Следующее"
+                navigationEl.style.display = 'block';
+            } else {
+                feedbackEl.innerHTML = `
+                    <i class="fas fa-times-circle"></i> Неправильно. 
+                    <span class="correct-answer">Правильный ответ: ${correctAnswer}</span>
+                `;
+                feedbackEl.className = 'exercise-feedback error';
             }
         });
-    });
-
-    const checkBtn = exerciseElement.querySelector('.check-btn');
-    if (checkBtn) {
-        checkBtn.addEventListener('click', function() {
-            const resultDiv = exerciseElement.querySelector('.result');
-            resultDiv.style.display = 'block';
-            
-            let allCorrect = true;
-            
-            const blanks = exerciseElement.querySelectorAll('.blank');
-            blanks.forEach(blank => {
-                const userAnswer = blank.textContent.trim();
-                const correctAnswer = blank.getAttribute('data-answer');
-                
-                if (userAnswer === correctAnswer) {
-                    blank.style.color = '#155724';
-                    blank.style.borderBottomColor = '#28a745';
-                } else {
-                    blank.style.color = '#721c24';
-                    blank.style.borderBottomColor = '#dc3545';
-                    allCorrect = false;
-                }
-            });
-            
-            const optionGroups = exerciseElement.querySelectorAll('.options');
-            optionGroups.forEach(group => {
-                const options = group.querySelectorAll('.option');
-                options.forEach(option => {
-                    if (option.hasAttribute('data-correct')) {
-                        if (option.classList.contains('selected')) {
-                            option.style.backgroundColor = '#d4edda';
-                        } else {
-                            allCorrect = false;
-                        }
-                    }
-                });
-            });
-            
-            if (allCorrect) {
-                resultDiv.className = 'result correct';
-                resultDiv.innerHTML = '✓ Отлично! Все ответы правильные!';
+        
+        nextBtn.addEventListener('click', () => {
+            currentExerciseIndex++;
+            if (currentExerciseIndex < exercises[topic].length) {
+                renderExercise(topic, level, currentExerciseIndex);
             } else {
-                resultDiv.className = 'result incorrect';
-                resultDiv.innerHTML = '✗ Есть ошибки. Проверьте ответы.';
+                // Все упражнения выполнены
+                renderCompletion(topic, level);
             }
         });
     }
     
-    exerciseElement.querySelectorAll('.option').forEach(option => {
-        if (!option.draggable) {
-            option.addEventListener('click', function() {
-                const group = this.closest('.options');
-                group.querySelectorAll('.option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-                
-                this.classList.add('selected');
+    // Функция отображения экрана завершения
+    function renderCompletion(topic, level) {
+        const activeContainer = exercisesContainers[level];
+        activeContainer.innerHTML = '';
+        
+        activeContainer.innerHTML = `
+            <div class="completion-message">
+                <i class="fas fa-check-circle"></i>
+                <h3>Тема завершена!</h3>
+                <p>Вы успешно выполнили все упражнения по теме "${document.querySelector(`[data-topic="${topic}"] .topic-name`).textContent}".</p>
+                <button class="continue-btn">
+                    <i class="fas fa-arrow-right"></i> Продолжить обучение
+                </button>
+            </div>
+        `;
+        
+        activeContainer.querySelector('.continue-btn').addEventListener('click', () => {
+            // Сброс выбранной темы
+            document.querySelectorAll('.training-topic-item.active').forEach(item => {
+                item.classList.remove('active');
             });
-        }
-    });
-
-    const prevBtn = exerciseElement.querySelector('#prevTopic');
-    const nextBtn = exerciseElement.querySelector('#nextTopic');
+            currentTopic = null;
+            activeContainer.innerHTML = '';
+            activeContainer.style.display = 'none';
+            
+            // Прокрутка к списку тем
+            document.querySelector(`#${level}-tab h3`).scrollIntoView({ behavior: 'smooth' });
+        });
+    }
     
-    if (prevBtn) prevBtn.addEventListener('click', () => alert('Навигация по темам будет реализована в будущем'));
-    if (nextBtn) nextBtn.addEventListener('click', () => alert('Навигация по темам будет реализована в будущем'));
-}
+    // Обработчики событий для вкладок
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            switchTab(button.dataset.tab);
+        });
+    });
+    
+    // Обработчики событий для тем
+    topicItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const topic = item.dataset.topic;
+            
+            topicItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            
+            currentTopic = topic;
+            showExercises(currentTopic, currentLevel);
+        });
+    });
+    
+    // Инициализация
+    switchTab('easy');
+});

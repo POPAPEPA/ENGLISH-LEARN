@@ -1,4 +1,4 @@
-const words = [
+ const words = [
     { english: "apple", russian: "яблоко" },
     { english: "book", russian: "книга" },
     { english: "computer", russian: "компьютер" },
